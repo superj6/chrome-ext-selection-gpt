@@ -5,6 +5,7 @@ const spanSelection = document.getElementById('span-selection');
 
 const buttonSummary = document.getElementById('button-summary');
 const buttonQuiz = document.getElementById('button-quiz');
+const gptOutput = document.getElementById('gpt-output');
 
 let storage = {
   apiKey: null,
@@ -29,6 +30,29 @@ function displaySelection(text){
   spanSelection.textContent = text;
 }
 
+function gptQuery(text){
+  return "test summary";
+}
+
+function displayQuery(displayHtml){
+  gptOutput.replaceChildren(displayHtml);
+}
+
+async function processSummary(text){
+  const summary = await gptQuery(text);
+  
+  
+  const h3 = document.createElement('h3');
+  h3.textContent = 'Summary Result:';
+  const p = document.createElement('p');
+  p.textContent = summary;
+
+  const div = document.createElement('div');
+  div.replaceChildren(h3, p);
+
+  displayQuery(div);
+}
+
 async function init(){
   storage = await getStorage();
   displayApi(storage.apiKey);
@@ -42,4 +66,8 @@ buttonApi.addEventListener('click', () => {
     updateApi(inputApi.value);
     inputApi.value = '';
   }
+});
+
+buttonSummary.addEventListener('click', () => {
+  processSummary(storage.selectionText);
 });
