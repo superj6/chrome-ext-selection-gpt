@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="/styles/panel.css" />
+</head>
+<body>
+  <h1>Selection GPT</h1>
+  <section>
+    <label for="input-api">Api Key:</label>
+    <input id="input-api" type="text" placeholder="..." />
+    <button id="button-api">Update</button>
+    <p>Don't have one? Sign up with openai and create one <a href="https://platform.openai.com/api-keys">here</a>.</p>
+  </section>
+  <section>
+    <h2>Selected Text</h2>
+    <div>
+      <span id="span-selection">...</span>
+    </div>
+  </section>
+  <section>
+    <h2>Actions</h2>
+    <ul>
+      <li><button id="button-summary">Summary</button></li>
+      <li><button id="button-quiz">Quiz</button></li>
+    </ul>
+    <div id="gpt-output"></div>
+  </section>
+  <script src="/scripts/panel.js"></script>
+</body>
+</html>
