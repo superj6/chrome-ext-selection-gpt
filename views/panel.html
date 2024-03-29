@@ -14,7 +14,7 @@
   </section>
   <section>
     <h2>Selected Text</h2>
-    <div>
+    <div class="overflow-display">
       <span id="span-selection">...</span>
     </div>
   </section>
@@ -24,7 +24,20 @@
       <li><button id="button-summary">Summary</button></li>
       <li><button id="button-quiz">Quiz</button></li>
     </ul>
-    <div id="gpt-output"></div>
+    <div id="gpt-output">
+      <div id="output-plain" class="hidden">
+        <h3></h3>
+	<p></p>
+      </div>
+      <div id="output-multi-choice" class="hidden">
+        <h3></h3>
+	<p></p>
+	<ul>
+	</ul>
+	<button>Answer</button>
+	<output></output>
+      </div>
+    </div>
   </section>
   <script src="/scripts/panel.js"></script>
 </body>

@@ -6,6 +6,8 @@ const spanSelection = document.getElementById('span-selection');
 const buttonSummary = document.getElementById('button-summary');
 const buttonQuiz = document.getElementById('button-quiz');
 const gptOutput = document.getElementById('gpt-output');
+const outputPlain = document.getElementById('output-plain');
+const outputMultiChoice = document.getElementById('output-multi-choice');
 
 let storage = {
   apiKey: null,
@@ -30,7 +32,7 @@ function displaySelection(text){
   spanSelection.textContent = text;
 }
 
-function gptQuery(text){
+function gptQuery(query, text){
   return fetch("https://api.openai.com/v1/chat/completions", {
     method: 'POST',
     headers: {
@@ -41,9 +43,9 @@ function gptQuery(text){
       model: 'gpt-3.5-turbo',
       messages: [{
         role: 'user',
-	content: `Give an easy to read summary of the following text, highlighting the most important aspects and themes: \n${text}`
+	content: `Respond to triple quoted query """${query}""" in regards to the following triple quoted text: """${text}"""`
       }],
-      temperature: 0.7
+      temperature: 0.8
     }) 
   })
   .then((response) => response.json())
@@ -56,23 +58,55 @@ function gptQuery(text){
   });
 }
 
-function displayQuery(displayHtml){
-  gptOutput.replaceChildren(displayHtml);
+function clearOutput(){
+  for(const child of gptOutput.children){
+    child.classList.add('hidden');
+  }
+}
+
+function displayPlain(title, text){
+  outputPlain.getElementsByTagName('h3')[0].textContent = title;
+  outputPlain.getElementsByTagName('p')[0].textContent = text;
+
+  outputPlain.classList.remove('hidden');
+}
+
+function displayMultiChoice(title, quiz){
+  outputMultiChoice.getElementsByTagName('h3')[0].textContent = title;
+  outputMultiChoice.getElementsByTagName('p')[0].textContent = quiz['question'];
+  
+  ul = outputMultiChoice.getElementsByTagName('ul')[0];
+  ul.innerHTML = '';
+  for(const [key, value] of Object.entries(quiz['choices'])){
+    const input = document.createElement('input');
+    input.type="radio";
+    const label = document.createElement('label');
+    label.textContent = key;
+    const p = document.createElement('p');
+    p.textContent = value;
+
+    const li = document.createElement('li');
+    li.replaceChildren(input, label, p);
+
+    ul.appendChild(li);
+  }
+
+  outputMultiChoice.classList.remove('hidden');
 }
 
 async function processSummary(text){
-  const summary = await gptQuery(text);
-  
-  
-  const h3 = document.createElement('h3');
-  h3.textContent = 'Summary Result:';
-  const p = document.createElement('p');
-  p.textContent = summary;
+  const summary = await gptQuery('Give an easy to read summary, highlighting the most important aspects and themes.', text);
 
-  const div = document.createElement('div');
-  div.replaceChildren(h3, p);
+  displayPlain('Summary Result', summary);
+}
 
-  displayQuery(div);
+async function processQuiz(text){
+  clearOutput();
+
+  const quizRaw = await gptQuery('Give a unique multiple choice question that tests understanding and is not a direct quote. Only return the question in json format with no explanation, having parameters {"question": "", "choices": {"A": "", "B": "", "C": "", "D": ""}, "correct": ""}', text);
+  const quiz = JSON.parse(quizRaw);
+
+  displayMultiChoice('Review Quiz', quiz);
 }
 
 async function init(){
@@ -92,4 +126,8 @@ buttonApi.addEventListener('click', () => {
 
 buttonSummary.addEventListener('click', () => {
   processSummary(storage.selectionText);
+});
+
+buttonQuiz.addEventListener('click', () => {
+  processQuiz(storage.selectionText);
 });
