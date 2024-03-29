@@ -23,8 +23,16 @@
   <section>
     <h2>Actions</h2>
     <ul>
-      <li><button id="button-summary">Summary</button></li>
-      <li><button id="button-quiz">Quiz</button></li>
+      <li>
+	<button id="button-summary">Summary</button>
+      </li>
+      <li>
+	<button id="button-quiz">Quiz</button>
+      </li>
+      <li>
+	<input id="input-custom" type="text" />
+	<button id="button-custom">Custom</button>
+      </li>
     </ul>
     <div id="gpt-output">
       <div id="output-plain" class="hidden">
@@ -34,8 +42,7 @@
       <div id="output-multi-choice" class="hidden">
         <h3></h3>
 	<p></p>
-	<ul>
-	</ul>
+	<ul></ul>
 	<button>Answer</button>
 	<output></output>
       </div>

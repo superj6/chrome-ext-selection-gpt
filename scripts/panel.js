@@ -5,6 +5,9 @@ const spanSelection = document.getElementById('span-selection');
 
 const buttonSummary = document.getElementById('button-summary');
 const buttonQuiz = document.getElementById('button-quiz');
+const inputCustom = document.getElementById('input-custom');
+const buttonCustom = document.getElementById('button-custom');
+
 const gptOutput = document.getElementById('gpt-output');
 const outputPlain = document.getElementById('output-plain');
 const outputMultiChoice = document.getElementById('output-multi-choice');
@@ -45,7 +48,7 @@ function gptQuery(query, text){
         role: 'user',
 	content: `Respond to triple quoted query """${query}""" in regards to the following triple quoted text: """${text}"""`
       }],
-      temperature: 0.7
+      temperature: 1
     }) 
   })
   .then((response) => response.json())
@@ -125,6 +128,14 @@ async function processQuiz(text){
   displayMultiChoice('Review Quiz', quiz);
 }
 
+async function processCustom(query, text){
+  clearOutput();
+  
+  const result = await gptQuery(query, text);
+
+  displayPlain('Query Result', result);
+}
+
 async function init(){
   storage = await getStorage();
   displayApi(storage.apiKey);
@@ -146,4 +157,10 @@ buttonSummary.addEventListener('click', () => {
 
 buttonQuiz.addEventListener('click', () => {
   processQuiz(storage.selectionText);
+});
+
+buttonCustom.addEventListener('click', () => {
+  if(inputCustom.value){
+    processCustom(inputCustom.value, storage.selectionText);
+  }
 });
