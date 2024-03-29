@@ -18,15 +18,15 @@ function initPanel(selectionText, tabId){
 
 chrome.contextMenus.removeAll(() => {
   chrome.contextMenus.create({
-     id: "selectoinGpt",
-     title: "GPT Quiz Me!",
+     id: "selectionGpt",
+     title: "Selection GPT",
      contexts:["selection"],  // ContextType
   });
 })
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   switch(info.menuItemId){
-    case 'selectoinGpt':
+    case 'selectionGpt':
       initPanel(info.selectionText, tab.id);
       break;
   }
