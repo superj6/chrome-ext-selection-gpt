@@ -31,7 +31,29 @@ function displaySelection(text){
 }
 
 function gptQuery(text){
-  return "test summary";
+  return fetch("https://api.openai.com/v1/chat/completions", {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${storage.apiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      model: 'gpt-3.5-turbo',
+      messages: [{
+        role: 'user',
+	content: `Give an easy to read summary of the following text, highlighting the most important aspects and themes: \n${text}`
+      }],
+      temperature: 0.7
+    }) 
+  })
+  .then((response) => response.json())
+  .then((response) => {
+    console.log(response);
+    return response['choices'][0]['message']['content'];
+  })
+  .catch((e) => {
+    console.log(e);
+  });
 }
 
 function displayQuery(displayHtml){
