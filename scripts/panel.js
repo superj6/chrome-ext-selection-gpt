@@ -45,7 +45,7 @@ function gptQuery(query, text){
         role: 'user',
 	content: `Respond to triple quoted query """${query}""" in regards to the following triple quoted text: """${text}"""`
       }],
-      temperature: 0.8
+      temperature: 0.7
     }) 
   })
   .then((response) => response.json())
@@ -79,22 +79,38 @@ function displayMultiChoice(title, quiz){
   ul.innerHTML = '';
   for(const [key, value] of Object.entries(quiz['choices'])){
     const input = document.createElement('input');
+    input.name="multi-choice"
     input.type="radio";
+    input.value = key;
     const label = document.createElement('label');
-    label.textContent = key;
-    const p = document.createElement('p');
-    p.textContent = value;
+    label.textContent = `${key}. ${value}`;
 
     const li = document.createElement('li');
-    li.replaceChildren(input, label, p);
+    li.replaceChildren(input, label);
 
     ul.appendChild(li);
   }
+
+  output = outputMultiChoice.getElementsByTagName('output')[0];
+  output.textContent = '';
+
+  outputMultiChoice.getElementsByTagName('button')[0].onclick = () => {
+    selected = document.querySelector('input[name="multi-choice"]:checked');
+    if(selected){
+      if(selected.value === quiz['correct']){
+        output.textContent = `${selected.value} is correct!`;
+      }else{
+        output.textContent = `${selected.value} is incorrect, try again.`
+      }
+    }
+  };
 
   outputMultiChoice.classList.remove('hidden');
 }
 
 async function processSummary(text){
+  clearOutput();
+
   const summary = await gptQuery('Give an easy to read summary, highlighting the most important aspects and themes.', text);
 
   displayPlain('Summary Result', summary);
@@ -103,7 +119,7 @@ async function processSummary(text){
 async function processQuiz(text){
   clearOutput();
 
-  const quizRaw = await gptQuery('Give a unique multiple choice question that tests understanding and is not a direct quote. Only return the question in json format with no explanation, having parameters {"question": "", "choices": {"A": "", "B": "", "C": "", "D": ""}, "correct": ""}', text);
+  const quizRaw = await gptQuery('Give a unique multiple choice question that tests deep understanding and is not a direct quote. Only return the question in json format with no explanation, having parameters {"question": "", "choices": {"A": "", "B": "", "C": "", "D": ""}, "correct": ""}', text);
   const quiz = JSON.parse(quizRaw);
 
   displayMultiChoice('Review Quiz', quiz);
