@@ -3,6 +3,9 @@
   "name": "Selection GPT",
   "description": "Select text and give GPT generated summary, review quiz, or answer to custom question.",
   "version": "1.0",
+  "action":{
+    "default_popup": "views/index.html"
+  },
   "background":{
     "service_worker": "/scripts/background.js"
   },

@@ -1,6 +1,6 @@
 .overflow-display{
-  max-height: 10rem;
-  overflow: scroll;
+  max-height: 15rem;
+  overflow-y: scroll;
 }
 
 .hidden{
