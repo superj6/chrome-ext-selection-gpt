@@ -1,3 +1,7 @@
+body{
+  background: lightgrey;
+}
+
 .overflow-display{
   max-height: 15rem;
   overflow-y: scroll;
