@@ -173,3 +173,7 @@ buttonCustom.addEventListener('click', () => {
     processCustom(inputCustom.value, selectionText);
   }
 });
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  close();
+});
