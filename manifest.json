@@ -4,6 +4,7 @@
   "description": "Select text and give GPT generated summary, review quiz, or answer to custom question.",
   "version": "1.0",
   "action":{
+    "default_icon": "/icons/main-icon.png",
     "default_popup": "/views/index.html"
   },
   "background":{
