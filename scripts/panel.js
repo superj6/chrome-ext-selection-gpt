@@ -9,6 +9,7 @@ const inputCustom = document.getElementById('input-custom');
 const buttonCustom = document.getElementById('button-custom');
 
 const gptOutput = document.getElementById('gpt-output');
+const outputLoading = document.getElementById('output-loading');
 const outputPlain = document.getElementById('output-plain');
 const outputMultiChoice = document.getElementById('output-multi-choice');
 
@@ -72,7 +73,15 @@ function clearOutput(){
   }
 }
 
+function displayLoading(){
+  clearOutput();
+
+  outputLoading.classList.remove('hidden');
+}
+
 function displayPlain(title, text){
+  clearOutput();
+
   outputPlain.getElementsByTagName('h3')[0].textContent = title;
   outputPlain.getElementsByTagName('p')[0].textContent = text;
 
@@ -80,6 +89,8 @@ function displayPlain(title, text){
 }
 
 function displayMultiChoice(title, quiz){
+  clearOutput();
+
   outputMultiChoice.getElementsByTagName('h3')[0].textContent = title;
   outputMultiChoice.getElementsByTagName('p')[0].textContent = quiz['question'];
   
@@ -116,29 +127,32 @@ function displayMultiChoice(title, quiz){
   outputMultiChoice.classList.remove('hidden');
 }
 
-async function processSummary(text){
-  clearOutput();
+function processSummary(text){
+  displayLoading();
 
-  const summary = await gptQuery('Give an easy to read summary, highlighting the most important aspects and themes.', text);
-
-  displayPlain('Summary Result', summary);
+  gptQuery('Give an easy to read summary, highlighting the most important aspects and themes.', text)
+  .then((summary) => {
+    displayPlain('Summary Result', summary);
+  });
 }
 
-async function processQuiz(text){
-  clearOutput();
+function processQuiz(text){
+  displayLoading();
 
-  const quizRaw = await gptQuery('Give a unique multiple choice question that tests deep understanding and is not a direct quote. Only return the question in json format with no explanation, having parameters {"question": "", "choices": {"A": "", "B": "", "C": "", "D": ""}, "correct": ""}', text);
-  const quiz = JSON.parse(quizRaw);
-
-  displayMultiChoice('Review Quiz', quiz);
+  gptQuery('Give a unique multiple choice question that tests deep understanding and is not a direct quote. Only return the question in json format with no explanation, having parameters {"question": "", "choices": {"A": "", "B": "", "C": "", "D": ""}, "correct": ""}', text)
+  .then((quiz) => JSON.parse(quiz))
+  .then((quiz) => {
+    displayMultiChoice('Review Quiz', quiz);
+  });
 }
 
-async function processCustom(query, text){
-  clearOutput();
+function processCustom(query, text){
+  displayLoading();
   
-  const result = await gptQuery(query, text);
-
-  displayPlain('Query Result', result);
+  gptQuery(query, text)
+  .then((result) => {
+    displayPlain('Query Result', result);
+  });
 }
 
 function init(){
