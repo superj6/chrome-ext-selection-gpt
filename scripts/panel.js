@@ -12,10 +12,15 @@ const gptOutput = document.getElementById('gpt-output');
 const outputPlain = document.getElementById('output-plain');
 const outputMultiChoice = document.getElementById('output-multi-choice');
 
+let selectionText;
 let storage = {
-  apiKey: null,
-  selectionText: null
+  apiKey: null
 };
+
+function getSelectionText(){
+  let url = new URL(document.location.toString());
+  return url.searchParams.get('selectionText');
+}
 
 function getStorage(){
   return chrome.storage.local.get(storage);
@@ -136,10 +141,14 @@ async function processCustom(query, text){
   displayPlain('Query Result', result);
 }
 
-async function init(){
-  storage = await getStorage();
-  displayApi(storage.apiKey);
-  displaySelection(storage.selectionText);
+function init(){
+  selectionText = getSelectionText();
+  displaySelection(selectionText);
+
+  getStorage().then((s) => {
+    storage = s;
+    displayApi(storage.apiKey);
+  });
 }
 
 init();
@@ -152,15 +161,15 @@ buttonApi.addEventListener('click', () => {
 });
 
 buttonSummary.addEventListener('click', () => {
-  processSummary(storage.selectionText);
+  processSummary(selectionText);
 });
 
 buttonQuiz.addEventListener('click', () => {
-  processQuiz(storage.selectionText);
+  processQuiz(selectionText);
 });
 
 buttonCustom.addEventListener('click', () => {
   if(inputCustom.value){
-    processCustom(inputCustom.value, storage.selectionText);
+    processCustom(inputCustom.value, selectionText);
   }
 });
