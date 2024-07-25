@@ -18,7 +18,10 @@ chrome.contextMenus.removeAll(() => {
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   switch(info.menuItemId){
     case 'selectionGpt':
-      openPanel(info.selectionText, tab.id);
+      chrome.tabs.query({active: true}, ([activeTab]) => {
+	let tabId = tab.id != -1 ? tab.id : activeTab.id;
+        openPanel(info.selectionText, tabId);
+      });
       break;
   }
 });
