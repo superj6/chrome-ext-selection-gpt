@@ -8,10 +8,14 @@ function openPanel(text, tabId){
     });
     chrome.sidePanel.open({tabId: tabId});
   }catch{
-    browser.sidebarAction.setPanel({
-      tabId: tabId,
-      panel: url
-    });
+    try{
+      browser.sidebarAction.setPanel({
+	tabId: tabId,
+	panel: url
+      });
+    }catch{
+      chrome.tabs.create({url: url});
+    }
   }
 }
 
