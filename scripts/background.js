@@ -1,10 +1,18 @@
 function openPanel(text, tabId){
-  chrome.sidePanel.setOptions({
-    tabId: tabId,
-    path: '/views/panel.html?' + new URLSearchParams({selectionText: text}),
-    enabled: true,
-  });
-  chrome.sidePanel.open({tabId: tabId});
+  let url = '/views/panel.html?' + new URLSearchParams({selectionText: text});
+  try{
+    chrome.sidePanel.setOptions({
+      tabId: tabId,
+      path: url,
+      enabled: true,
+    });
+    chrome.sidePanel.open({tabId: tabId});
+  }catch{
+    browser.sidebarAction.setPanel({
+      tabId: tabId,
+      panel: url
+    });
+  }
 }
 
 chrome.contextMenus.removeAll(() => {
@@ -22,6 +30,11 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 	let tabId = tab.id != -1 ? tab.id : activeTab.id;
         openPanel(info.selectionText, tabId);
       });
+      try{
+        browser.sidebarAction.open();
+      }catch{
+
+      }
       break;
   }
 });
