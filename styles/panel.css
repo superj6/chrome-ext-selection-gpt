@@ -1,5 +1,5 @@
 body{
-  background: lightgrey;
+  background: plum;
 }
 
 .overflow-display{
@@ -9,4 +9,9 @@ body{
 
 .hidden{
   display: none;
+}
+
+#output-multi-choice > ul{
+  list-style-type: none;
+  padding: 0;
 }
