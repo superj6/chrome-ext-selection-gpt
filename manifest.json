@@ -3,8 +3,10 @@
   "name": "Selection GPT",
   "description": "Select text and give GPT generated summary, review quiz, or answer to custom question.",
   "version": "1.0",
+  "icons": {
+    "128": "/icons/main-icon.png"
+  },
   "action":{
-    "default_icon": "/icons/main-icon.png",
     "default_popup": "/views/index.html"
   },
   "background":{
