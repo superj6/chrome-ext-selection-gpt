@@ -14,7 +14,7 @@ function openPanel(text, tabId){
 	panel: url
       });
     }catch{
-      chrome.tabs.create({url: url});
+      chrome.windows.create({url: url});
     }
   }
 }
