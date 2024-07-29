@@ -9,8 +9,13 @@
   "action":{
     "default_popup": "/views/index.html"
   },
+  "sidebar_action":{
+    "default_icon": "/icons/main-icon.png",
+    "default_panel": "/views/panel.html",
+    "default_title": "Selection GPT" 
+  },
   "background":{
-    "service_worker": "/scripts/background.js"
+    "scripts": ["/scripts/background.js"]
   },
   "permissions": ["contextMenus", "sidePanel", "storage"]
 }
